@@ -6,7 +6,7 @@ from webob import exc
 from paste import httpserver
 from paste.deploy import loadapp
 
-INI_PATH = '/home/heven/code/learn-python/paste.ini'
+INI_PATH = 'paste.ini'
 
 @wsgify
 def application(request):

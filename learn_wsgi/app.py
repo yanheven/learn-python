@@ -14,3 +14,5 @@ def app(environ, start_response):
 if __name__ == '__main__':
     from paste import httpserver
     httpserver.serve(app, host="0.0.0.0", port='8080')
+
+from hello import application
