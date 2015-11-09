@@ -1,5 +1,6 @@
 __author__ = 'evan'
 import  logging
+import os
 
 def get_loger():
     # create logger
@@ -11,7 +12,9 @@ def get_loger():
     ch.setLevel(logging.WARN)
 
     # set log file
-    fh = logging.FileHandler('xueqiu.log')
+    file_path = os.path.split(os.path.realpath(__file__))[0]
+    file = os.path.join(file_path,'xueqiu.log')
+    fh = logging.FileHandler(file)
     fh.setLevel(logging.DEBUG)
 
     # create formatter
