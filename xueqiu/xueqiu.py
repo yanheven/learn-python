@@ -29,7 +29,7 @@ def get_hold(url):
     hold = {}
     holdings_str = '''['''
     cash = 100
-    sorted(holdings, key=lambda x: x['stock_id'])
+    # sorted(holdings, key=lambda x: x['stock_id'])
     for i in holdings:
         for k, v in i.items():
             if k == 'weight':
@@ -46,12 +46,12 @@ def get_hold(url):
                        (stock_id, weight, segment_name)
     holdings_str = holdings_str[:-1] + ''']'''
     hold_body = {'cash':str(cash),'holdings':holdings_str}
-    return hold_body
+    return hold_body, cash
 
 
 def follow():
     other_url = 'http://xueqiu.com/P/ZH010389'
-    other_hold = get_hold(other_url)
+    other_hold, cash = get_hold(other_url)
     global origin_hold
     if not origin_hold:
         origin_hold = json.dumps(other_hold)
@@ -60,7 +60,7 @@ def follow():
         other_hold['segment'] = 'true'
         other_hold['comment'] = '老刀:I am back.'
         rebalance(other_hold)
-        return True
+        return cash < 1
     return False
 
 
