@@ -6,6 +6,7 @@ import requests
 import time
 
 from const import headers
+import logger
 import login
 
 
@@ -13,26 +14,29 @@ origin_hold_000979 = ''
 origin_hold_010389 = ''
 origin_hold_016097 = ''
 
+LOG = logger.get_loger()
+
 def get_format_time():
     return time.strftime("%F %T")
 
 
 def rebalance(body):
-    print(body)
     rebalance_url = 'http://xueqiu.com/cubes/rebalancing/create.json'
     session = login.get_session()
     headers['Referer'] = 'http://xueqiu.com/p/update?action=holdings&symbol=ZH672409'
     rebalance_res = session.post(rebalance_url, headers=headers,
                              data=body)
-    print get_format_time(),
-    print('rebalance', rebalance_res)
+    # print get_format_time(),
+    # print('rebalance', rebalance_res)
+    LOG.warn('rebalance: %d %s' % (rebalance_res.status_code, rebalance_url))
 
 
 def get_hold(url):
     res = requests.get(url, headers=headers)
-    print get_format_time(),
-    print('get change', res),
-    print(url)
+    # print get_format_time(),
+    # print('get change', res),
+    # print(url)
+    LOG.warn('get change: %d %s' % (res.status_code, url))
     holdings = res.content
     holdings = holdings.split('SNB.cubeInfo = ')[1].split('SNB.cubePieData')[0]
     holdings = json.loads(holdings,encoding='utf-8').get('view_rebalancing').get('holdings')
@@ -63,7 +67,8 @@ def follow_010389():
     try:
         other_hold, cash = get_hold(other_url)
     except Exception as e:
-        print(e)
+        # print(e)
+        LOG.error('get change ERROR: %s' % e)
     else:
         global origin_hold_010389
         if not origin_hold_010389:
