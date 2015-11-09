@@ -1,7 +1,8 @@
 # Server Specific Configurations
 server = {
     'port': '8080',
-    'host': '0.0.0.0'
+    'host': '0.0.0.0'st
+
 }
 
 # Pecan Application Configurations

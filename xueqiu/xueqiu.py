@@ -58,6 +58,7 @@ def follow():
     elif origin_hold != json.dumps(other_hold):
         other_hold['cube_symbol'] = 'ZH672409'
         other_hold['segment'] = 'true'
+        other_hold['comment'] = '老刀:I am back.'
         rebalance(other_hold)
         return True
     return False
