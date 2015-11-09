@@ -126,11 +126,11 @@ if __name__ == '__main__':
     flag_010389 = True
     while True:
         if flag_016097:
-            # time.sleep(random.randint(1,2))
+            time.sleep(1)
             if follow_016097():
                 flag_016097 = False
         if flag_010389:
-            # time.sleep(random.randint(1,3))
+            time.sleep(1)
             if follow_010389():
                 flag_010389 = False
         if not (flag_010389 or flag_016097):
