@@ -95,7 +95,8 @@ rebalance_body = {'cube_symbol':'ZH698696',
                   #  'holdings':holdings
                   }
 
-while True:
-    if follow():
-        break
-    time.sleep(1)
+if __name__ == '__main__':
+    while True:
+        if follow():
+            break
+        time.sleep(1)
