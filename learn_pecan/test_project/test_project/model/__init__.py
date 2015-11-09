@@ -13,3 +13,23 @@ def init_model():
     see http://pecan.readthedocs.org/en/latest/databases.html
     """
     pass
+
+class User(object):
+
+    def __init__(self, name, email):
+        self.name = name
+        self.email = email
+        # self.birthday = birthday
+        self.__dict__ = self._get_user_dict()
+
+
+    def _get_user_dict(self):
+        return dict(
+            name = self.name,
+            email = self.email,
+            # birthday = self.birthday.isoformat()
+        )
+
+    def __json__(self):
+        return self._get_user_dict()
+

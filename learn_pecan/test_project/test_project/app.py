@@ -1,6 +1,7 @@
 from pecan import make_app
 from test_project import model
 
+import json
 
 def setup_app(config):
 
