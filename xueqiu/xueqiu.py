@@ -1,6 +1,7 @@
 #_*_ coding: UTF-8 _*_
 __author__ = 'evan'
 import json
+import random
 import requests
 import time
 
@@ -66,4 +67,4 @@ if __name__ == '__main__':
     while True:
         if follow():
             break
-        time.sleep(1)
+        time.sleep(random.randint(1,5))
