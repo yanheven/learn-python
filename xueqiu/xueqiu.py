@@ -9,9 +9,12 @@ from const import headers
 import login
 
 
-origin_hold = ''
+origin_hold_000979 = ''
+origin_hold_010389 = ''
+origin_hold_016097 = ''
 
 def rebalance(body):
+    print(body)
     rebalance_url = 'http://xueqiu.com/cubes/rebalancing/create.json'
     session = login.get_session()
     headers['Referer'] = 'http://xueqiu.com/p/update?action=holdings&symbol=ZH672409'
@@ -23,13 +26,13 @@ def rebalance(body):
 def get_hold(url):
     res = requests.get(url, headers=headers)
     print('get change', res)
+    print(url)
     holdings = res.content
     holdings = holdings.split('SNB.cubeInfo = ')[1].split('SNB.cubePieData')[0]
     holdings = json.loads(holdings,encoding='utf-8').get('view_rebalancing').get('holdings')
     hold = {}
     holdings_str = '''['''
     cash = 100
-    # sorted(holdings, key=lambda x: x['stock_id'])
     for i in holdings:
         for k, v in i.items():
             if k == 'weight':
@@ -49,13 +52,15 @@ def get_hold(url):
     return hold_body, cash
 
 
-def follow():
+def follow_010389():
     other_url = 'http://xueqiu.com/P/ZH010389'
     other_hold, cash = get_hold(other_url)
-    global origin_hold
-    if not origin_hold:
-        origin_hold = json.dumps(other_hold)
-    elif origin_hold != json.dumps(other_hold):
+    global origin_hold_010389
+    if not origin_hold_010389:
+        origin_hold_010389 = json.dumps(other_hold)
+    elif origin_hold_010389 != json.dumps(other_hold):
+        print(origin_hold_010389)
+        print(json.dumps(other_hold))
         other_hold['cube_symbol'] = 'ZH672409'
         other_hold['segment'] = 'true'
         other_hold['comment'] = '老刀:I am back.'
@@ -64,8 +69,56 @@ def follow():
     return False
 
 
+def follow_000979():
+    other_url = 'http://xueqiu.com/P/ZH000979'
+    other_hold, cash = get_hold(other_url)
+    global origin_hold_000979
+    hold_json =json.dumps(other_hold)
+    if not origin_hold_000979:
+        origin_hold_000979 = hold_json
+    elif origin_hold_000979 != hold_json:
+        for i in xrange(len(hold_json)):
+            if hold_json[i] != origin_hold_000979[i]:
+                print(origin_hold_000979[:i+1])
+                print(hold_json[:i+1])
+                break
+        other_hold['cube_symbol'] = 'ZH675871'
+        other_hold['segment'] = 'true'
+        other_hold['comment'] = '老刀:I am back.'
+        rebalance(other_hold)
+        return cash < 1
+    return False
+
+
+def follow_016097():
+    other_url = 'http://xueqiu.com/P/ZH016097'
+    other_hold, cash = get_hold(other_url)
+    global origin_hold_016097
+    hold_json =json.dumps(other_hold)
+    if not origin_hold_016097:
+        origin_hold_016097 = hold_json
+    elif origin_hold_016097 != hold_json:
+        other_hold['cube_symbol'] = 'ZH675871'
+        other_hold['segment'] = 'true'
+        other_hold['comment'] = '老刀:I am back.'
+        rebalance(other_hold)
+        return cash < 1
+    return False
+
 if __name__ == '__main__':
+    flag_016097 = True
+    flag_010389 = True
     while True:
-        if follow():
+        if flag_016097:
+            time.sleep(random.randint(1,3))
+            if follow_016097():
+                flag_016097 = False
+        if flag_010389:
+            time.sleep(random.randint(1,3))
+            if follow_010389():
+                flag_010389 = False
+        if not (flag_010389 or flag_016097):
             break
-        time.sleep(random.randint(1,5))
+        hour = time.strftime('%H')
+        if hour == '7':
+            break
