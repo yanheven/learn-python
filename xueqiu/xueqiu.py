@@ -92,17 +92,21 @@ def follow_000979():
 
 def follow_016097():
     other_url = 'http://xueqiu.com/P/ZH016097'
-    other_hold, cash = get_hold(other_url)
-    global origin_hold_016097
-    hold_json =json.dumps(other_hold)
-    if not origin_hold_016097:
-        origin_hold_016097 = hold_json
-    elif origin_hold_016097 != hold_json:
-        other_hold['cube_symbol'] = 'ZH675871'
-        other_hold['segment'] = 'true'
-        other_hold['comment'] = '老刀:I am back.'
-        rebalance(other_hold)
-        return cash < 1
+    try:
+        other_hold, cash = get_hold(other_url)
+    except Exception as e:
+        print(e)
+    else:
+        global origin_hold_016097
+        hold_json =json.dumps(other_hold)
+        if not origin_hold_016097:
+            origin_hold_016097 = hold_json
+        elif origin_hold_016097 != hold_json:
+            other_hold['cube_symbol'] = 'ZH675871'
+            other_hold['segment'] = 'true'
+            other_hold['comment'] = '老刀:I am back.'
+            rebalance(other_hold)
+            return cash < 1
     return False
 
 if __name__ == '__main__':
