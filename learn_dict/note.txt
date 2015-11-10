@@ -1,0 +1,5 @@
+python makebigfunc.py > func-big.py
+python makebigleteral.py > func-literal-big.py
+
+python -m timeit -n 10000 -r 5 -v "$(cat func-big.py)"
+python -m timeit -n 10000 -r 5 -v "$(cat literal-big.py)"
