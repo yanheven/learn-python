@@ -1,15 +1,13 @@
 #_*_ coding: UTF-8 _*_
 __author__ = 'evan'
 import json
-import random
 import requests
 import time
 
-from const import HEADERS
-import emailer
 import logger
 import login
 import mine
+import nomore_xueqiu
 
 origin_hold_000979 = ''
 origin_hold_010389 = ''
@@ -23,19 +21,20 @@ def rebalance(body):
     session = login.get_session()
     if not session:
         return
-    HEADERS['Referer'] = 'http://xueqiu.com/p/update?action=holdings&symbol=ZH672409'
+    headers = nomore_xueqiu.HEADERS
+    headers['Referer'] = 'http://xueqiu.com/p/update?action=holdings&symbol=ZH672409'
     try:
-        rebalance_res = session.post(rebalance_url, headers=HEADERS,
+        rebalance_res = session.post(rebalance_url, headers=headers,
                              data=body)
     except Exception as e:
         LOG.warn('rebalance Fail: %s '%e)
         return
-    del HEADERS['Referer']
+    del headers['Referer']
     LOG.warn('rebalance: %d %s' % (rebalance_res.status_code, body['cube_symbol']))
 
 
 def get_hold(url):
-    res = requests.get(url, headers=HEADERS)
+    res = requests.get(url, headers=nomore_xueqiu.HEADERS)
     LOG.warn('get change: %d %s' % (res.status_code, url))
     holdings = res.content
     holdings = holdings.split('SNB.cubeInfo = ')[1].split('SNB.cubePieData')[0]
@@ -48,7 +47,7 @@ def get_hold(url):
     for i in holdings:
         weight = i['weight']
         cash -= weight
-        if weight > 0:
+        if weight > 10:
             stock_id = i['stock_id']
             for his in history_holdings:
                 if his['stock_id'] == stock_id:
@@ -62,7 +61,7 @@ def get_hold(url):
     return hold_body, cash, code, price
 
 
-def follow_010389():
+def follow_010389(mine_session):
     other_url = 'http://xueqiu.com/P/ZH010389'
     try:
         other_hold, cash, code, price = get_hold(other_url)
@@ -73,8 +72,7 @@ def follow_010389():
         if not origin_hold_010389:
             origin_hold_010389 = json.dumps(other_hold)
         elif origin_hold_010389 != json.dumps(other_hold):
-            # session = login.get_mine_session()
-            # mine.buy(session, code, price)
+            mine.buy(mine_session, code, price)
             other_hold['cube_symbol'] = 'ZH672409'
             other_hold['segment'] = 'true'
             other_hold['comment'] = '老刀:I am back.'
@@ -83,66 +81,23 @@ def follow_010389():
     return False
 
 
-# def follow_000979():
-#     other_url = 'http://xueqiu.com/P/ZH000979'
-#     try:
-#         other_hold, cash, price= get_hold(other_url)
-#     except Exception as e:
-#         print(e)
-#     else:
-#         global origin_hold_000979
-#         hold_json =json.dumps(other_hold)
-#         if not origin_hold_000979:
-#             origin_hold_000979 = hold_json
-#         elif origin_hold_000979 != hold_json:
-#             for i in xrange(len(hold_json)):
-#                 if hold_json[i] != origin_hold_000979[i]:
-#                     print(origin_hold_000979[:i+1])
-#                     print(hold_json[:i+1])
-#                     break
-#             other_hold['cube_symbol'] = 'ZH675871'
-#             other_hold['segment'] = 'true'
-#             other_hold['comment'] = '老刀:I am back.'
-#             rebalance(other_hold)
-#             return cash < 1
-#     return False
-
-
-# def follow_016097():
-#     other_url = 'http://xueqiu.com/P/ZH016097'
-#     try:
-#         other_hold, cash = get_hold(other_url)
-#     except Exception as e:
-#         print(e)
-#     else:
-#         global origin_hold_016097
-#         hold_json =json.dumps(other_hold)
-#         if not origin_hold_016097:
-#             origin_hold_016097 = hold_json
-#         elif origin_hold_016097 != hold_json:
-#             other_hold['cube_symbol'] = 'ZH675871'
-#             other_hold['segment'] = 'true'
-#             other_hold['comment'] = '老刀:I am back.'
-#             rebalance(other_hold)
-#             return cash < 1
-#     return False
-
-
 if __name__ == '__main__':
     flag_done_010389 = True
+    mine_session = login.get_mine_session()
+    mine.get_history(mine_session)
     while True:
-
         if flag_done_010389:
-            time.sleep(1)
-            if follow_010389():
+            if follow_010389(mine_session):
                 flag_done_010389 = False
         if not flag_done_010389:
             break
         hour = time.strftime('%H')
         minitu = int(time.strftime('%M'))
         if minitu % 10 == 1:
-            session = login.get_mine_session()
-            mine.keep_awake(session)
-            mine.get_history(session)
+            second = minitu = int(time.strftime('%S'))
+            if second == 1:
+                session = login.get_mine_session()
+                mine.keep_awake(mine_session)
+                mine.get_history(mine_session)
         if hour == '7':
             break

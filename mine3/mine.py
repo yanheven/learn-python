@@ -3,7 +3,6 @@ __author__ = 'evan'
 
 import time
 
-from const import HEADERS_MINE
 import logger
 import login
 import nomore_mine
@@ -12,28 +11,29 @@ LOG = logger.get_loger()
 
 
 def buy(session, code, price):
-    balance = get_balance(session)
+    balance = float(nomore_mine.BALANCE)
     if not balance:
         return False
     quantity = int(balance / price * 100)
     url = nomore_mine.TRANSACT_URL
-    body = nomore_mine.BUY_BODY
+    BODY = nomore_mine.BUY_BODY
+    body = BODY
     body['SECU_CODE'] = code
     body['QTY'] = quantity
     try:
-        res = session.post(url, headers=HEADERS_MINE,
+        res = session.post(url, headers=nomore_mine.HEADERS,
                              data=body)
     except Exception as e:
         LOG.error('market buy Fail %s' % e)
     else:
-        LOG.warn('market buy: %d code: %s quantity: %d' %
-                 (res.status_code, code, quantity))
+        LOG.warn('market buy: %d %s code: %s quantity: %d' %
+                 (res.status_code, res.content, code, quantity))
 
 def get_history(session):
     url = nomore_mine.TRANSACT_URL
     body = nomore_mine.HISTORY_BODY
     try:
-        res = session.post(url, headers=HEADERS_MINE, data=body)
+        res = session.post(url, headers=nomore_mine.HEADERS, data=body)
     except Exception as e:
         LOG.error('history Fail :%s' % e)
     else:
@@ -43,7 +43,7 @@ def get_balance(session):
     url = nomore_mine.TRANSACT_URL
     body = nomore_mine.BALANCE_BODY
     try:
-        res = session.post(url, headers=HEADERS_MINE, data=body)
+        res = session.post(url, headers=nomore_mine.HEADERS, data=body)
         content = res.content
         # content = content.decode('gbk', 'ignore')
         # content = content.encode(encoding='gbk')
@@ -67,7 +67,7 @@ def keep_awake(session):
     url = nomore_mine.TRANSACT_URL
     body = nomore_mine.LOCK_BODY
     try:
-        res = session.post(url, headers=HEADERS_MINE, data=body)
+        res = session.post(url, headers=nomore_mine.HEADERS, data=body)
     except Exception as e:
         LOG.error('keep awake Fail :%s' % e)
         return False
@@ -80,6 +80,7 @@ if __name__ == '__main__':
     while True:
         keep_awake(session)
         get_history(session)
+        # buy(session, code='510900', price=103.10)
         # get_balance(session)
         time.sleep(600)
 

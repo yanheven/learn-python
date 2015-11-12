@@ -2,7 +2,6 @@
 __author__ = 'evan'
 import requests
 
-from const import HEADERS
 import nomore_xueqiu
 import nomore_mine
 import logger
@@ -28,7 +27,7 @@ def get_xueqiu_session():
 
     url = nomore_xueqiu.LOGIN_URL
     body = nomore_xueqiu.LOGIN_BODY
-    headers = HEADERS
+    headers = nomore_xueqiu.HEADERS
     return _login(url, body, headers)
 
 
