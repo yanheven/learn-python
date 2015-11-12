@@ -42,15 +42,14 @@ def get_hold(url):
     content = json.loads(holdings,encoding='utf-8')
     holdings = content.get('view_rebalancing').get('holdings')
     history_holdings = content.get('sell_rebalancing').get('rebalancing_histories')
-    hold = {}
     holdings_str = '''['''
     cash = 100
-    code = holdings[:-1]['stock_symbol'][2:]
+    code = holdings[-1]['stock_symbol'][2:]
     for i in holdings:
         weight = i['weight']
         cash -= weight
         if weight > 0:
-            stock_id = hold['stock_id']
+            stock_id = i['stock_id']
             for his in history_holdings:
                 if his['stock_id'] == stock_id:
                     price = his['price']
@@ -59,6 +58,7 @@ def get_hold(url):
                        (stock_id, weight, segment_name)
     holdings_str = holdings_str[:-1] + ''']'''
     hold_body = {'cash':str(cash),'holdings':holdings_str}
+    LOG.warn('get change: code : %s price: %f' % (code, price))
     return hold_body, cash, code, price
 
 
@@ -139,9 +139,10 @@ if __name__ == '__main__':
         if not flag_done_010389:
             break
         hour = time.strftime('%H')
-        minitu = int(time.strftime('%M'))
+        minitu = int(time.strftime('%S'))
         if minitu % 10 == 1:
             session = login.get_mine_session()
             mine.keep_awake(session)
+            mine.get_history(session)
         if hour == '7':
             break
