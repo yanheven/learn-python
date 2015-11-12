@@ -139,7 +139,7 @@ if __name__ == '__main__':
         if not flag_done_010389:
             break
         hour = time.strftime('%H')
-        minitu = int(time.strftime('%S'))
+        minitu = int(time.strftime('%M'))
         if minitu % 10 == 1:
             session = login.get_mine_session()
             mine.keep_awake(session)
