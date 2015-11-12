@@ -2,32 +2,42 @@ __author__ = 'evan'
 import  logging
 import os
 
+LOG = None
+
 def get_loger():
-    # create logger
-    logger = logging.getLogger()
-    logger.setLevel(logging.WARN)
+    global LOG
 
-    # create console handler and set level to debug
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.WARN)
+    if LOG is not None:
+        return LOG
+    else:
+        # create logger
+        logger = logging.getLogger()
+        logger.setLevel(logging.WARN)
 
-    # set log file
-    file_path = os.path.split(os.path.realpath(__file__))[0]
-    file = os.path.join(file_path,'xueqiu.log')
-    fh = logging.FileHandler(file)
-    fh.setLevel(logging.DEBUG)
+        # create console handler and set level to debug
+        ch = logging.StreamHandler()
+        ch.setLevel(logging.WARN)
 
-    # create formatter
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+        # set log file
+        file_path = os.path.split(os.path.realpath(__file__))[0]
+        file = os.path.join(file_path,'xueqiu.log')
+        fh = logging.FileHandler(file)
+        fh.setLevel(logging.WARN)
 
-    # add formatter to ch
-    ch.setFormatter(formatter)
-    fh.setFormatter(formatter)
+        # create formatter
+        formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-    # add ch to logger
-    logger.addHandler(ch)
-    logger.addHandler(fh)
+        # add formatter to ch
+        ch.setFormatter(formatter)
+        fh.setFormatter(formatter)
 
-    # 'application' code
-    logger.debug('initalized get logger')
-    return logger
+        # add ch to logger
+        logger.addHandler(ch)
+        logger.addHandler(fh)
+
+        # 'application' code
+        logger.debug('initalized get logger')
+
+        LOG = logger
+
+    return LOG

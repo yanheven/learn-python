@@ -5,9 +5,11 @@ import random
 import requests
 import time
 
-from const import headers
+from const import HEADERS
+import emailer
 import logger
 import login
+from time_util import get_format_time
 
 
 origin_hold_000979 = ''
@@ -16,23 +18,21 @@ origin_hold_016097 = ''
 
 LOG = logger.get_loger()
 
-def get_format_time():
-    return time.strftime("%F %T")
-
 
 def rebalance(body):
     rebalance_url = 'http://xueqiu.com/cubes/rebalancing/create.json'
     session = login.get_session()
-    headers['Referer'] = 'http://xueqiu.com/p/update?action=holdings&symbol=ZH672409'
-    rebalance_res = session.post(rebalance_url, headers=headers,
+    HEADERS['Referer'] = 'http://xueqiu.com/p/update?action=holdings&symbol=ZH672409'
+    rebalance_res = session.post(rebalance_url, headers=HEADERS,
                              data=body)
+    del HEADERS['Referer']
     # print get_format_time(),
     # print('rebalance', rebalance_res)
-    LOG.warn('rebalance: %d %s' % (rebalance_res.status_code, rebalance_url))
+    LOG.warn('rebalance: %d %s' % (rebalance_res.status_code, body['cube_symbol']))
 
 
 def get_hold(url):
-    res = requests.get(url, headers=headers)
+    res = requests.get(url, headers=HEADERS)
     # print get_format_time(),
     # print('get change', res),
     # print(url)
@@ -125,6 +125,7 @@ def follow_016097():
             rebalance(other_hold)
             return cash < 1
     return False
+
 
 if __name__ == '__main__':
     flag_016097 = True
