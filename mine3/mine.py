@@ -82,6 +82,6 @@ if __name__ == '__main__':
         get_history(session)
         # buy(session, code='510900', price=103.10)
         # get_balance(session)
-        time.sleep(600)
+        time.sleep(1800)
 
 
