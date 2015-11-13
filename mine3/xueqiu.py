@@ -18,7 +18,7 @@ LOG = logger.get_loger()
 
 def rebalance(body):
     rebalance_url = 'http://xueqiu.com/cubes/rebalancing/create.json'
-    session = login.get_session()
+    session = login.get_xueqiu_session()
     if not session:
         return
     headers = nomore_xueqiu.HEADERS
@@ -71,9 +71,10 @@ def follow_010389(mine_session):
         global origin_hold_010389
         if not origin_hold_010389:
             origin_hold_010389 = json.dumps(other_hold)
-        elif origin_hold_010389 != json.dumps(other_hold):
+        elif origin_hold_010389 == json.dumps(other_hold):
             # mine.buy(mine_session, code, price)
             other_hold['cube_symbol'] = 'ZH672409'
+            # other_hold['cube_symbol'] = 'ZH675871'
             other_hold['segment'] = 'true'
             other_hold['comment'] = '老刀:I am back.'
             rebalance(other_hold)
