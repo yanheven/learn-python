@@ -92,12 +92,12 @@ if __name__ == '__main__':
         if not flag_done_010389:
             break
         hour = time.strftime('%H')
-        minitu = int(time.strftime('%M'))
-        if minitu % 10 == 1:
-            second = minitu = int(time.strftime('%S'))
-            if second == 1:
-                session = login.get_mine_session()
-                mine.keep_awake(mine_session)
-                mine.get_history(mine_session)
+        # minitu = int(time.strftime('%M'))
+        # if minitu % 10 == 1:
+        #     second = minitu = int(time.strftime('%S'))
+        #     if second == 1:
+        #         session = login.get_mine_session()
+        #         mine.keep_awake(mine_session)
+        #         mine.get_history(mine_session)
         if hour == '7':
             break
