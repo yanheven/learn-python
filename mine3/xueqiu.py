@@ -72,7 +72,7 @@ def follow_010389(mine_session):
         if not origin_hold_010389:
             origin_hold_010389 = json.dumps(other_hold)
         elif origin_hold_010389 != json.dumps(other_hold):
-            mine.buy(mine_session, code, price)
+            # mine.buy(mine_session, code, price)
             other_hold['cube_symbol'] = 'ZH672409'
             other_hold['segment'] = 'true'
             other_hold['comment'] = '老刀:I am back.'
@@ -92,12 +92,5 @@ if __name__ == '__main__':
         if not flag_done_010389:
             break
         hour = time.strftime('%H')
-        # minitu = int(time.strftime('%M'))
-        # if minitu % 10 == 1:
-        #     second = minitu = int(time.strftime('%S'))
-        #     if second == 1:
-        #         session = login.get_mine_session()
-        #         mine.keep_awake(mine_session)
-        #         mine.get_history(mine_session)
-        if hour == '7':
+        if hour == '15':
             break
