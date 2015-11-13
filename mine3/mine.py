@@ -77,11 +77,6 @@ def keep_awake(session):
 
 if __name__ == '__main__':
     session = login.get_mine_session()
-    while True:
-        keep_awake(session)
-        get_history(session)
-        # buy(session, code='510900', price=103.10)
-        # get_balance(session)
-        time.sleep(1800)
-
+    keep_awake(session)
+    get_history(session)
 
