@@ -32,7 +32,7 @@ def get_loger():
         fh.setFormatter(formatter)
 
         # add ch to logger
-        logger.addHandler(ch)
+        # logger.addHandler(ch)
         logger.addHandler(fh)
 
         # 'application' code

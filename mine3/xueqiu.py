@@ -35,7 +35,6 @@ def rebalance(body):
 
 def get_hold(url):
     res = requests.get(url, headers=nomore_xueqiu.HEADERS)
-    LOG.warn('get change: %d %s' % (res.status_code, url))
     holdings = res.content
     holdings = holdings.split('SNB.cubeInfo = ')[1].split('SNB.cubePieData')[0]
     content = json.loads(holdings,encoding='utf-8')
@@ -57,7 +56,6 @@ def get_hold(url):
                        (stock_id, weight, segment_name)
     holdings_str = holdings_str[:-1] + ''']'''
     hold_body = {'cash':str(cash),'holdings':holdings_str}
-    LOG.warn('get change: code : %s price: %f' % (code, price))
     return hold_body, cash, code, price
 
 
@@ -79,6 +77,7 @@ def follow_010389(mine_session):
             other_hold['comment'] = '老刀:I am back.'
             rebalance(other_hold)
             return cash < 1
+    LOG.warn('get change: code : %s price: %f' % (code, price))
     return False
 
 
