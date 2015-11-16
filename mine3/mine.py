@@ -8,14 +8,16 @@ LOG = logger.get_loger()
 
 
 def buy(session, code, price):
-    balance = 23900
-    if not balance:
-        return False
-    quantity = int(balance / price / 100) * 100
+    # balance = 23900
+    # if not balance:
+    #     return False
+    # quantity = int(balance / price / 100) * 100
+    quantity = 1200
     url = nomore_mine.TRANSACT_URL
     body = nomore_mine.BUY_BODY
     body['SECU_CODE'] = code
     body['QTY'] = quantity
+    body['PRICE'] = 17.2
     try:
         res = session.post(url, headers=nomore_mine.HEADERS,
                            data=body)
@@ -68,5 +70,8 @@ def keep_awake(session):
 if __name__ == '__main__':
     session = login.get_mine_session()
     keep_awake(session)
-    get_history(session)
+    import time
+    while True:
+        get_history(session)
+        time.sleep(1800)
 

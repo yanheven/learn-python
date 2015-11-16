@@ -73,7 +73,7 @@ def follow_010389(mine_session):
         global origin_hold_010389
         if not origin_hold_010389:
             origin_hold_010389 = json.dumps(other_hold)
-        elif origin_hold_010389 != json.dumps(other_hold):
+        elif origin_hold_010389 == json.dumps(other_hold):
             mine.buy(mine_session, code, price)
             other_hold['cube_symbol'] = 'ZH672409'
             # other_hold['cube_symbol'] = 'ZH675871'
