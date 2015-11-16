@@ -8,16 +8,16 @@ LOG = logger.get_loger()
 
 
 def buy(session, code, price):
-    balance = 23900
+    balance = 21786
     if not balance:
         return False
-    quantity = int(balance / price / 105) * 100
+    quantity = int(balance / price / 110) * 100
     # quantity = 1200
     url = nomore_mine.TRANSACT_URL
     body = nomore_mine.BUY_BODY
     body['SECU_CODE'] = code
     body['QTY'] = quantity
-    body['PRICE'] = 17.2
+    body['PRICE'] = price
     try:
         res = session.post(url, headers=nomore_mine.HEADERS,
                            data=body)
