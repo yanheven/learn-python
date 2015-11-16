@@ -29,8 +29,12 @@ def rebalance(body):
     except Exception as e:
         LOG.warn('rebalance Fail: %s '%e)
         return
-    del headers['Referer']
-    LOG.warn('rebalance: %d %s' % (rebalance_res.status_code, body['cube_symbol']))
+    else:
+        LOG.warn('rebalance: %d %s' % (rebalance_res.status_code, body['cube_symbol']))
+    finally:
+        del headers['Referer']
+
+
 
 
 def get_hold(url):
@@ -70,14 +74,14 @@ def follow_010389(mine_session):
         if not origin_hold_010389:
             origin_hold_010389 = json.dumps(other_hold)
         elif origin_hold_010389 != json.dumps(other_hold):
-            # mine.buy(mine_session, code, price)
+            mine.buy(mine_session, code, price)
             other_hold['cube_symbol'] = 'ZH672409'
             # other_hold['cube_symbol'] = 'ZH675871'
             other_hold['segment'] = 'true'
             other_hold['comment'] = '老刀:I am back.'
             rebalance(other_hold)
             return cash < 1
-    LOG.warn('get change: code : %s price: %f' % (code, price))
+        LOG.warn('get change: code : %s price: %f' % (code, price))
     return False
 
 
