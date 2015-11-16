@@ -16,3 +16,4 @@ def log(test):
 def f():
     print "hello"
 
+f()

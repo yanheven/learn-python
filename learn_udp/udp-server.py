@@ -5,7 +5,8 @@ sock.bind(('',8889))
 
 try:
     while True:
-        data,address=sock.recvfrom(8192)
+        data, address=sock.recvfrom(8192)
+        print('udp server starting...')
         print "Datagram from",address,data
         sock.sendto(data,address)
 
