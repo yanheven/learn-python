@@ -2,6 +2,7 @@ from pecan import expose, redirect, request, abort
 from webob.exc import status_map
 import pecan
 import json
+import time
 
 from test_project.login import get_user
 
@@ -213,6 +214,7 @@ class RootController(object):
 
     @expose(generic=True, template='json')
     def index(self):
+        time.sleep(10)
         return [dict(id=k, name=v) for k, v in BOOKS.items()]
 
     # HTTP POST /

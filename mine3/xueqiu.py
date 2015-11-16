@@ -46,7 +46,7 @@ def get_hold(url):
     history_holdings = content.get('sell_rebalancing').get('rebalancing_histories')
     holdings_str = '''['''
     cash = 100
-    code = holdings[-1]['stock_symbol'][2:]
+    code = str(holdings[-1]['stock_symbol'][2:])
     for i in holdings:
         weight = i['weight']
         cash -= weight
@@ -67,6 +67,7 @@ def follow_010389(mine_session):
     other_url = 'http://xueqiu.com/P/ZH010389'
     try:
         other_hold, cash, code, price = get_hold(other_url)
+        print(type(cash))
     except Exception as e:
         LOG.error('get change ERROR: %s' % e)
     else:
