@@ -8,10 +8,10 @@ LOG = logger.get_loger()
 
 
 def buy(session, code, price):
-    balance = float(nomore_mine.BALANCE)
+    balance = 23900
     if not balance:
         return False
-    quantity = int(balance / price / 100)
+    quantity = int(balance / price / 100) * 100
     url = nomore_mine.TRANSACT_URL
     body = nomore_mine.BUY_BODY
     body['SECU_CODE'] = code
