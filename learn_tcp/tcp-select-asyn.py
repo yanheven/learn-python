@@ -26,3 +26,5 @@ try:
                     data[x]=data.get(x,'')+newData
                     if x not in ous:
                         ous.append(x)
+except Exception as e:
+    print('%s' % e)
