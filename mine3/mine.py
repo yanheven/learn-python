@@ -8,7 +8,7 @@ LOG = logger.get_loger()
 
 
 def buy(session, code, price):
-    balance = 21786
+    balance = 23880
     if not balance:
         return False
     quantity = int(balance / price / 110) * 100
