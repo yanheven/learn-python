@@ -14,7 +14,10 @@ def buy(session, code, price):
     quantity = int(balance / price / 110) * 100
     # quantity = 1200
     url = nomore_mine.TRANSACT_URL
-    body = nomore_mine.BUY_BODY
+    if code.startswith('6'):
+        body = nomore_mine.BSH_BODY
+    else:
+        body = nomore_mine.BSZ_BODY
     body['SECU_CODE'] = code
     body['QTY'] = quantity
     body['PRICE'] = price
