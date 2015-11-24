@@ -58,7 +58,7 @@ def get_mine_session():
         try:
             for k, v in cookie.items():
                 session.cookies.set(name=k, value=v)
-            login_res = session.post(url, headers=headers, data=body)
+            login_res = session.post(url, headers=headers, data=body, verify = False)
         except Exception as e:
             LOG.error('login Fail: %s %s' % (url, e))
             return False

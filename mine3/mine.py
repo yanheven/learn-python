@@ -8,16 +8,20 @@ LOG = logger.get_loger()
 
 
 def buy(session, code, price):
-    balance = 24793
-    if not balance:
-        return False
-    quantity = int(balance / price / 110) * 100
-    # quantity = 1200
+    # 90% balance
+    balance = 23000
+    # 1% more than other
+    price = int(price * 101) / 100.0
+    quantity = int(balance / price / 100) * 100
     url = nomore_mine.TRANSACT_URL
+    # if code.startswith('6'):
+    #     body = nomore_mine.BSH_BODY
+    # else:
+    #     body = nomore_mine.BSZ_BODY
     if code.startswith('6'):
-        body = nomore_mine.BSH_BODY
+        body = nomore_mine.BHL_BODY
     else:
-        body = nomore_mine.BSZ_BODY
+        body = nomore_mine.BZL_BODY
     body['SECU_CODE'] = code
     body['QTY'] = quantity
     body['PRICE'] = price
@@ -27,8 +31,8 @@ def buy(session, code, price):
     except Exception as e:
         LOG.error('market buy Fail %s' % e)
     else:
-        LOG.warn('market buy: %d %s code: %s quantity: %d' %
-                 (res.status_code, res.content, code, quantity))
+        LOG.warn('market buy: %d %s code: %s quantity: %d price: %f' %
+                 (res.status_code, res.content, code, quantity, price))
 
 
 def get_history(session):
