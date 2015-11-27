@@ -78,7 +78,6 @@ def follow_010389(mine_session):
         elif code and origin_hold_010389 != code:
             mine.buy(mine_session, code, price)
             other_hold['cube_symbol'] = 'ZH672409'
-            # other_hold['cube_symbol'] = 'ZH675871'
             other_hold['segment'] = 'true'
             other_hold['comment'] = '老刀:I am back.'
             rebalance(other_hold)
