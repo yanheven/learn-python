@@ -44,12 +44,13 @@ def get_hold(url):
     history_holdings = content.get('sell_rebalancing').get('rebalancing_histories')
     holdings_str = '''['''
     cash = 100
-    code = str(holdings[-1]['stock_symbol'][2:])
+    code = ''
     price = 0
     for i in holdings:
         weight = i['weight']
         cash -= weight
         if weight > 90:
+            code = i['stock_symbol'][2:]
             stock_id = i['stock_id']
             for his in history_holdings:
                 if his['stock_id'] == stock_id:
@@ -61,7 +62,7 @@ def get_hold(url):
     hold_body = {'cash': str(cash), 'holdings': holdings_str}
     if price:
         return hold_body, cash, code, price
-    return 0, 0, 0, 0
+    return 0, 0, '', 0
 
 
 def follow_010389(mine_session):
@@ -75,12 +76,12 @@ def follow_010389(mine_session):
         if not origin_hold_010389:
             origin_hold_010389 = code
         elif origin_hold_010389 != code:
-            # mine.buy(mine_session, code, price)
+            mine.buy(mine_session, code, price)
             other_hold['cube_symbol'] = 'ZH672409'
             # other_hold['cube_symbol'] = 'ZH675871'
             other_hold['segment'] = 'true'
             other_hold['comment'] = '老刀:I am back.'
-            # rebalance(other_hold)
+            rebalance(other_hold)
             return cash < 1
         LOG.warn('get change: code : %s price: %f' % (code, price))
     return False
