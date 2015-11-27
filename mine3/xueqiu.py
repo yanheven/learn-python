@@ -49,7 +49,7 @@ def get_hold(url):
     for i in holdings:
         weight = i['weight']
         cash -= weight
-        if weight > 10:
+        if weight > 90:
             stock_id = i['stock_id']
             for his in history_holdings:
                 if his['stock_id'] == stock_id:
@@ -59,7 +59,9 @@ def get_hold(url):
                        (stock_id, weight, segment_name)
     holdings_str = holdings_str[:-1] + ''']'''
     hold_body = {'cash': str(cash), 'holdings': holdings_str}
-    return hold_body, cash, code, price
+    if price:
+        return hold_body, cash, code, price
+    return 0, 0, 0, 0
 
 
 def follow_010389(mine_session):
@@ -71,14 +73,14 @@ def follow_010389(mine_session):
     else:
         global origin_hold_010389
         if not origin_hold_010389:
-            origin_hold_010389 = json.dumps(other_hold)
-        elif origin_hold_010389 != json.dumps(other_hold):
-            mine.buy(mine_session, code, price)
+            origin_hold_010389 = code
+        elif origin_hold_010389 != code:
+            # mine.buy(mine_session, code, price)
             other_hold['cube_symbol'] = 'ZH672409'
             # other_hold['cube_symbol'] = 'ZH675871'
             other_hold['segment'] = 'true'
             other_hold['comment'] = '老刀:I am back.'
-            rebalance(other_hold)
+            # rebalance(other_hold)
             return cash < 1
         LOG.warn('get change: code : %s price: %f' % (code, price))
     return False

@@ -9,7 +9,7 @@ LOG = logger.get_loger()
 
 def buy(session, code, price):
     # 90% balance
-    balance = 22574
+    balance = 27000
     # 1% more than other
     price = int(price * 101) / 100.0
     quantity = int(balance / price / 100) * 100
