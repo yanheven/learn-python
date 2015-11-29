@@ -35,8 +35,6 @@ def rebalance(body):
         del headers['Referer']
 
 
-
-
 def get_hold(url):
     res = requests.get(url, headers=nomore_xueqiu.HEADERS)
     holdings = res.content
