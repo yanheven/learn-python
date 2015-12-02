@@ -45,6 +45,7 @@ def get_hold(url):
     holdings_str = '''['''
     cash = 100
     code = str(holdings[-1]['stock_symbol'][2:])
+    price = 0
     for i in holdings:
         weight = i['weight']
         cash -= weight
@@ -57,7 +58,7 @@ def get_hold(url):
             holdings_str += '''{"stock_id":%s,"weight":%s,"segment_name":"%s"},'''%\
                        (stock_id, weight, segment_name)
     holdings_str = holdings_str[:-1] + ''']'''
-    hold_body = {'cash':str(cash),'holdings':holdings_str}
+    hold_body = {'cash': str(cash), 'holdings': holdings_str}
     return hold_body, cash, code, price
 
 
