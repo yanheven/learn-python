@@ -3,6 +3,7 @@ __author__ = 'evan'
 import json
 import requests
 import time
+import sys
 
 import logger
 import login
@@ -14,6 +15,8 @@ origin_hold_010389 = ''
 origin_hold_016097 = ''
 
 LOG = logger.get_loger()
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 
 def rebalance(body):

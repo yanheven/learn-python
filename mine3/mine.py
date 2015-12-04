@@ -3,8 +3,11 @@
 import logger
 import login
 import nomore_mine
+import sys
 
 LOG = logger.get_loger()
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 
 def buy(session, code, price):
