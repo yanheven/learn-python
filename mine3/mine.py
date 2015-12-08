@@ -34,8 +34,10 @@ def buy(session, code, price):
     except Exception as e:
         LOG.error('market buy Fail %s' % e)
     else:
-        LOG.warn('market buy: %d %s code: %s quantity: %d price: %f' %
-                 (res.status_code, res.content, code, quantity, price))
+        LOG.warn('market buy: %d code: %s quantity: %d price: %f' %
+                 (res.status_code,  code, quantity, price))
+#        LOG.warn('market buy: %d %s code: %s quantity: %d price: %f' %
+ #                (res.status_code, res.content, code, quantity, price))
 
 
 def get_history(session):
