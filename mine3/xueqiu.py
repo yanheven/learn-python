@@ -65,7 +65,7 @@ def get_hold(url):
     hold_body = {'cash': str(cash), 'holdings': holdings_str}
     if price:
         return hold_body, cash, code, price
-    return 0, 0, '', 0
+    return 0, 0, '0', 0
 
 
 def follow_010389(mine_session):
