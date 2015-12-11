@@ -10,9 +10,9 @@ import login
 import mine
 import nomore_xueqiu
 
-origin_hold_000979 = ''
-origin_hold_010389 = ''
-origin_hold_016097 = ''
+origin_hold_000979 = None
+origin_hold_010389 = None
+origin_hold_016097 = None
 
 LOG = logger.get_loger()
 reload(sys)
@@ -47,7 +47,7 @@ def get_hold(url):
     history_holdings = content.get('sell_rebalancing').get('rebalancing_histories')
     holdings_str = '''['''
     cash = 100
-    code = ''
+    code = '0'
     price = 0
     for i in holdings:
         weight = i['weight']
@@ -76,9 +76,9 @@ def follow_010389(mine_session):
         LOG.error('get change ERROR: %s' % e)
     else:
         global origin_hold_010389
-        if not origin_hold_010389:
+        if origin_hold_010389 is None:
             origin_hold_010389 = code
-        elif code and origin_hold_010389 != code:
+        elif origin_hold_010389 != code:
             mine.buy(mine_session, code, price)
             other_hold['cube_symbol'] = 'ZH672409'
             other_hold['segment'] = 'true'
