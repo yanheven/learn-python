@@ -83,7 +83,8 @@ def follow_010389(mine_session):
             other_hold['cube_symbol'] = 'ZH672409'
             other_hold['segment'] = 'true'
             other_hold['comment'] = '老刀:I am back.'
-            rebalance(other_hold)
+            if not code.startswith('3'):
+                rebalance(other_hold)
             return cash < 1
         LOG.warn('get change: code : %s price: %f' % (code, price))
     return False

@@ -12,7 +12,7 @@ sys.setdefaultencoding('utf-8')
 
 def buy(session, code, price):
     # 90% balance
-    balance = 24000
+    balance = 33905
     # 1% more than other
     price = int(price * 101) / 100.0
     quantity = int(balance / price / 100) * 100
