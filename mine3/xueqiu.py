@@ -19,6 +19,13 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 
+def get_price(code):
+    url = 'http://hq.sinajs.cn/list=' + code
+    res = requests.get(url)
+    price = float(res.content.split(',')[3])
+    return price
+
+
 def rebalance(body):
     rebalance_url = 'http://xueqiu.com/cubes/rebalancing/create.json'
     session = login.get_xueqiu_session()
@@ -44,7 +51,7 @@ def get_hold(url):
     holdings = holdings.split('SNB.cubeInfo = ')[1].split('SNB.cubePieData')[0]
     content = json.loads(holdings,encoding='utf-8')
     holdings = content.get('view_rebalancing').get('holdings')
-    history_holdings = content.get('sell_rebalancing').get('rebalancing_histories')
+    # history_holdings = content.get('sell_rebalancing').get('rebalancing_histories')
     holdings_str = '''['''
     cash = 100
     code = '0'
@@ -55,9 +62,11 @@ def get_hold(url):
         if weight > 90:
             code = i['stock_symbol'][2:]
             stock_id = i['stock_id']
-            for his in history_holdings:
-                if his['stock_id'] == stock_id:
-                    price = his['price']
+           #  for his in history_holdings:
+           #    if his['stock_id'] == stock_id:
+           #          price = his['price']
+            sinacode = i['stock_symbol'][:2].lower() + code
+            price = get_price(sinacode)
             segment_name = i['segment_name'].encode('utf-8')
             holdings_str += '''{"stock_id":%s,"weight":%s,"segment_name":"%s"},'''%\
                        (stock_id, weight, segment_name)
@@ -82,7 +91,7 @@ def follow_010389(mine_session):
             mine.buy(mine_session, code, price)
             other_hold['cube_symbol'] = 'ZH672409'
             other_hold['segment'] = 'true'
-            other_hold['comment'] = '老刀:I am back.'
+            other_hold['comment'] = ''
             if not code.startswith('3'):
                 rebalance(other_hold)
             return cash < 1
