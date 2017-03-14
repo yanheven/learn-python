@@ -83,7 +83,33 @@ alarm_str = '\nWarm Tips: After you choose your favorite nature sound,' \
             ' manual on product page, go to "Product Information > Technical' \
             ' Specification > User Manual [pdf ]", or via this link https://images-na.ssl-' \
             'images-amazon.com/images/I/B18uhatYo2S.pdf\n'
-follow_str = '''
+
+follow_str_us = '''
+Dear %s,
+
+Greetings! This is Elena from O'Hill customer service team.
+
+Please kindly be advised that we noticed that the package have delivered at you. May I know have you received it?
+The following is the details for your Amazon order: %s
+
+%s
+%s
+Product Link: http://www.amazon.%s/dp/%s
+
+This is a follow-up email to confirm whether you are completely happy with this purchase.
+If there was a problem with our product, please feel free to get back to us and we will help to get the problem solved ASAP.
+
+What can our customer service team offer?
+1, Instant refund for any defective products.
+2, Answer any type of questions within 24 hours.
+3, Make our customers satisfied.
+
+Looking forward to hearing from you!
+
+Best Regards,
+Elena'''
+
+follow_str_ca = '''
 Dear %s,
 
 Greetings! This is Elena from O'Hill customer service team.
@@ -122,6 +148,7 @@ send_account = 0
 for i in buys:
     # if i['order_id'] in refunds:
     #     continue
+    sku_info = None
     if 'US' == i['country']:
         sku_info = skus['com'].get(i['sku'])
         market_domain = 'com'
@@ -136,6 +163,7 @@ for i in buys:
     if 'B01N9AMYWA' == asin:
         extra_str = alarm_str
     product_name = sku_info['product_name']
+    follow_str = follow_str_ca if 'CA' == i['country'] else follow_str_us
     msg = MIMEText(follow_str % (i['buyer_name'], i['order_id'], product_name,
                                  extra_str, market_domain, asin),
                    'plain', 'utf-8')
